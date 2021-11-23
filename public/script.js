@@ -99,10 +99,7 @@ function saveFile(recordedChunks){
   URL.revokeObjectURL(blob); // clear from memory
   document.body.removeChild(downloadLink);
 }
-var peer = new Peer('undefined',{
-      path: '/myapp',
-      port:9000
-    });
+var peer = new Peer();
 let myVideoStream;
 let peers={}
 navigator.mediaDevices
