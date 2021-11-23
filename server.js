@@ -11,10 +11,7 @@ const io = require("socket.io")(server, {
 });
 const { ExpressPeerServer } = require("peer");
 const peerServer = ExpressPeerServer(server, {
-  debug: true,
-  path: '/myapp',
-  port:9000
-
+  debug: true
 });
 
 app.use("/peerjs", peerServer);
