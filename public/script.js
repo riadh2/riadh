@@ -100,8 +100,6 @@ function saveFile(recordedChunks){
   document.body.removeChild(downloadLink);
 }
 var peer = new Peer('undefined',{
-      host: 'http://3.139.70.133',
-      port: 9000,
       path: '/myapp'
     });
 let myVideoStream;
