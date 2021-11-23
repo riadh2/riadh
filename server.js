@@ -11,11 +11,9 @@ const io = require("socket.io")(server, {
   }
 });
 const { ExpressPeerServer } = require("peer");
-const peerServer = ExpressPeerServer(server, {
-  path: '/'
-});
+const peerServer = ExpressPeerServer(server);
 
-app.use("/", peerServer);
+app.use("/peerjs", peerServer);
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
