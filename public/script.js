@@ -100,7 +100,7 @@ function saveFile(recordedChunks){
   document.body.removeChild(downloadLink);
 }
 var peer = new Peer(undefined, {
-path: “/”,
+path: “/peerjs”,
 host: “/”,
 port: “3030”,
 });
