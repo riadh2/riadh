@@ -101,7 +101,9 @@ function saveFile(recordedChunks){
 }
 var peer = new Peer(undefined, {
   path: "/peerjs/myapp",
-  host: "https://video-chat.innovant.studio",
+  host: "/",
+  port: “3030”,
+
 });
 let myVideoStream;
 let peers={}
