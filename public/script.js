@@ -100,7 +100,7 @@ function saveFile(recordedChunks){
   document.body.removeChild(downloadLink);
 }
 var peer = new Peer(undefined, {
-  path: "/myapp",
+  path: "/peerjs/myapp",
   host: "/",
 });
 let myVideoStream;
