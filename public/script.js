@@ -100,11 +100,11 @@ function saveFile(recordedChunks){
   document.body.removeChild(downloadLink);
 }
 var peer = new Peer(undefined, {
-  path: "/peerjs/myapp",
-  host: "/",
-  port: “3030”,
-
+path: “/peerjs”,
+host: “/”,
+port: “3030”,
 });
+
 let myVideoStream;
 let peers={}
 navigator.mediaDevices
