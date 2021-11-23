@@ -54,7 +54,7 @@ return mediaRecorder;
 
 start.addEventListener('click', async function(){
   let stream = await recordScreen();
-  let mimeType = 'video/webm';
+  let mimeType = 'video/mp4';
   mediaRecorder = createRecorder(stream, mimeType);
 let node = document.createElement("p");
   node.textContent = "Started recording";
@@ -87,20 +87,25 @@ async function recordScreen() {
 function saveFile(recordedChunks){
 
  const blob = new Blob(recordedChunks, {
-    type: 'video/webm'
+    type: 'video/mp4'
   });
   let filename = window.prompt('Enter file name'),
       downloadLink = document.createElement('a');
   downloadLink.href = URL.createObjectURL(blob);
-  downloadLink.download = `${filename}.webm`;
+  downloadLink.download = `${filename}.mp4`;
 
   document.body.appendChild(downloadLink);
   downloadLink.click();
   URL.revokeObjectURL(blob); // clear from memory
   document.body.removeChild(downloadLink);
 }
-var peer = new Peer();
+var peer = new Peer(undefined, {
+  path: "/peerjs",
+  host: "/",
+  port: "443",
+});
 let myVideoStream;
+let peers={}
 navigator.mediaDevices
   .getUserMedia({
     audio: true,
@@ -117,7 +122,9 @@ navigator.mediaDevices
       call.on("stream", (userVideoStream) => {
         addVideoStream(video, userVideoStream);
       });
+
     });
+
 
     socket.on("user-connected", (userId) => {
       connectToNewUser(userId, stream);
@@ -130,10 +137,19 @@ const connectToNewUser = (userId, stream) => {
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
   });
+  call.on('close',()=>{
+    video.remove()
+  })
+  peers[userId]=call
 };
 
 peer.on("open", (id) => {
   socket.emit("join-room", ROOM_ID, id, user);
+});
+
+
+socket.on("user-disconnected", (userId) => {
+  if(peers[userId])peers[userId].close()
 });
 
 const addVideoStream = (video, stream) => {
