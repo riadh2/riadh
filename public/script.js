@@ -99,8 +99,13 @@ function saveFile(recordedChunks){
   URL.revokeObjectURL(blob); // clear from memory
   document.body.removeChild(downloadLink);
 }
-var peer = new Peer();
+var peer = new Peer(undefined, {
+  path: "/peerjs",
+  host: "/",
+  port: "443",
+});
 let myVideoStream;
+let peers={}
 navigator.mediaDevices
   .getUserMedia({
     audio: true,
@@ -130,11 +135,18 @@ const connectToNewUser = (userId, stream) => {
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
   });
+  call.on('close',()=>{
+    video.remove()
+  })
+  peers[userId]=call
 };
 
 peer.on("open", (id) => {
   socket.emit("join-room", ROOM_ID, id, user);
 });
+socket.on("user-disconnected",userId =>{
+  if(peers[userId])peers[userId].close()
+})
 
 const addVideoStream = (video, stream) => {
   video.srcObject = stream;
