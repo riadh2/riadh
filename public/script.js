@@ -105,6 +105,7 @@ var peer = new Peer(undefined, {
   port: "443",
 });
 let myVideoStream;
+let peers={}
 navigator.mediaDevices
   .getUserMedia({
     audio: true,
@@ -129,17 +130,26 @@ navigator.mediaDevices
       connectToNewUser(userId, stream);
     });
   });
+
 const connectToNewUser = (userId, stream) => {
   const call = peer.call(userId, stream);
   const video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
   });
-
+  call.on('close',()=>{
+    video.remove()
+  })
+  peers[userId]=call
 };
 
 peer.on("open", (id) => {
   socket.emit("join-room", ROOM_ID, id, user);
+});
+
+
+socket.on("user-disconnected", (userId) => {
+  if(peers[userId])peers[userId].close()
 });
 
 const addVideoStream = (video, stream) => {
